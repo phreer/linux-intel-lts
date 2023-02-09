@@ -22,14 +22,11 @@
  * Authors: Andreas Pokorny
  */
 
-#include "drm/drm_gem_shmem_helper.h"
-#include "drm/drm_print.h"
-#include "drm/virtgpu_drm.h"
-#include "linux/container_of.h"
-#include "linux/err.h"
-#include "linux/scatterlist.h"
+#include <drm/drm_gem_shmem_helper.h>
+#include <drm/virtgpu_drm.h>
 #include <drm/drm_prime.h>
 #include <linux/virtio_dma_buf.h>
+#include <linux/scatterlist.h>
 
 #include "virtgpu_drv.h"
 
@@ -183,6 +180,8 @@ struct drm_gem_object *virtgpu_gem_prime_import_sg_table(
 	struct virtio_gpu_object_params params = { 0 };
 	size_t size = 0;
 	bool use_dma_api = !virtio_has_dma_quirk(vgdev->vdev);
+	/* FIXME: this is a temporary workaround to make things work */
+	use_dma_api = true;
 
 	obj = drm_gem_shmem_prime_import_sg_table(dev, attach, table);
 	if (IS_ERR(obj)) {
