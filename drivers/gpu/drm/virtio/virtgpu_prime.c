@@ -189,13 +189,13 @@ struct drm_gem_object *virtgpu_gem_prime_import_sg_table(
 		return obj;
 	}
 
-	if (!vgdev->has_virgl_3d)
-		return obj;
-
 	bo = gem_to_virtio_gpu_obj(obj);
 	bo->guest_blob = true;
-	bo->host3d_blob = true;
+	bo->host3d_blob = false;
 	bo->blob_mem = VIRTGPU_BLOB_MEM_PRIME;
+
+	if (!vgdev->has_resource_blob)
+		return obj;
 
 	ret = virtio_gpu_resource_id_get(vgdev, &bo->hw_res_handle);
 	if (ret < 0) {
